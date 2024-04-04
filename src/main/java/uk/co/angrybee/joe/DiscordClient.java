@@ -89,7 +89,7 @@ public class DiscordClient extends ListenerAdapter {
     private static String roleToCheck;
 
     public static final char[] validCharacters = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h',
-            'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_'};
+            'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '_', '.'};
 
     public static JDA javaDiscordAPI;
 
@@ -838,16 +838,43 @@ public class DiscordClient extends ListenerAdapter {
     {
         String playerId = null;
 
+
         try
         {
-            URL pURL = new URL("https://api.mojang.com/users/profiles/minecraft/" + minecraftUsername);
-            URLConnection req = pURL.openConnection();
-            req.connect();
+            // cry about xbox
+            if (minecraftUsername.startsWith(".")) {
+                // remove the . obviously duh 
+                minecraftUsername = minecraftUsername.substring(1);
 
-            JsonParser jsonParser = new JsonParser();
-            JsonElement root = (JsonElement) jsonParser.parse(new InputStreamReader((InputStream) req.getContent()));
-            JsonObject rootObj = root.getAsJsonObject();
-            playerId = rootObj.get("id").getAsString();
+                URL pURL = new URL("https://api.geysermc.org/v2/xbox/xuid/" + minecraftUsername);
+                URLConnection req = pURL.openConnection();
+                req.connect();
+
+                JsonParser jsonParser = new JsonParser();
+                JsonElement root = (JsonElement) jsonParser.parse(new InputStreamReader((InputStream) req.getContent()));
+                JsonObject rootObj = root.getAsJsonObject();
+
+                // this is a stringnumber
+                playerId = rootObj.get("xuid").getAsString();
+
+                // now the string is a long
+                long xuidLong = Long.parseLong(playerId);
+                // now the long is a hex string, funny that
+                String xuidHex = Long.toHexString(xuidLong);
+
+                // now the string is a different string (this is getting tiresome)
+                playerId = "00000000-0000-0000-0000" + xuidHex.charAt(0) + "-" + xuidHex.substring(1);
+            }
+            else {
+                URL pURL = new URL("https://api.mojang.com/users/profiles/minecraft/" + minecraftUsername);
+                URLConnection req = pURL.openConnection();
+                req.connect();
+
+                JsonParser jsonParser = new JsonParser();
+                JsonElement root = (JsonElement) jsonParser.parse(new InputStreamReader((InputStream) req.getContent()));
+                JsonObject rootObj = root.getAsJsonObject();
+                playerId = rootObj.get("id").getAsString();
+            }
 
         }
         catch (IOException e)
@@ -988,11 +1015,15 @@ public class DiscordClient extends ListenerAdapter {
     }
 
 
-    public static void ReplyAndRemoveAfterSeconds(SlashCommandInteractionEvent event, MessageEmbed messageEmbed) {
+    public static void ReplyAndRemoveAfterSeconds(SlashCommandInteractionEvent event, MessageEmbed messageEmbed, boolean ephemeral) {
         if (DiscordWhitelister.removeUnnecessaryMessages)
             event.replyEmbeds(messageEmbed).queue(message -> message.deleteOriginal().queueAfter(DiscordWhitelister.removeMessageWaitTime, TimeUnit.SECONDS));
         else
-            event.replyEmbeds(messageEmbed).queue();
+            event.replyEmbeds(messageEmbed).setEphemeral(ephemeral).queue();
+    }
+
+    public static void ReplyAndRemoveAfterSeconds(SlashCommandInteractionEvent event, MessageEmbed messageEmbed) {
+        ReplyAndRemoveAfterSeconds(event, messageEmbed, true);
     }
 
     public static void QueueAndRemoveAfterSeconds(TextChannel textChannel, MessageEmbed messageEmbed) {

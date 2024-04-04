@@ -318,7 +318,11 @@ public class CommandAdd {
         AtomicBoolean successfulWhitelist = new AtomicBoolean(false);
 
         if (!WhitelistedPlayers.usingEasyWhitelist && authorPermissions.isUserCanUseCommand())
-            DiscordClient.ExecuteServerCommand("whitelist add " + finalNameToAdd);
+            if (finalNameToAdd.startsWith(".")) {
+                DiscordClient.ExecuteServerCommand("fwhitelist add " + finalNameToAdd.substring(1));
+            } else {
+                DiscordClient.ExecuteServerCommand("whitelist add " + finalNameToAdd);
+            }
         if (DiscordWhitelister.mainConfig.getFileConfiguration().getBoolean("use-geyser/floodgate-compatibility")) {
             addBedrockUser(finalNameToAdd);
         }
@@ -331,7 +335,7 @@ public class CommandAdd {
         {
             if (WhitelistedPlayers.usingEasyWhitelist && !invalidMinecraftName && WhitelistedPlayers.CheckForPlayerEasyWhitelist(finalNameToAdd)
                     || !WhitelistedPlayers.usingEasyWhitelist && WhitelistedPlayers.CheckForPlayer(finalNameToAdd)) {
-                event.replyEmbeds(embedBuilderWhitelistSuccess.build()).queue();
+                event.replyEmbeds(embedBuilderWhitelistSuccess.build()).setEphemeral(true).queue();
 
                 // For instructional message
                 successfulWhitelist.set(true);
@@ -378,7 +382,7 @@ public class CommandAdd {
                     if (successfulWhitelist.get()) {
                         if (DiscordWhitelister.mainConfig.getFileConfiguration().getBoolean("send-instructional-message-on-whitelist")) {
                             if (!DiscordWhitelister.mainConfig.getFileConfiguration().getBoolean("use-timer-for-instructional-message")) {
-                                event.replyEmbeds(DiscordClient.CreateInstructionalMessage()).queue();
+                                event.replyEmbeds(DiscordClient.CreateInstructionalMessage()).setEphemeral(true).queue();
                             } else {
                                 int waitTime = DiscordWhitelister.mainConfig.getFileConfiguration().getInt("timer-wait-time-in-seconds");
 
@@ -387,7 +391,7 @@ public class CommandAdd {
                                 {
                                     try {
                                         TimeUnit.SECONDS.sleep(waitTime);
-                                        event.replyEmbeds(DiscordClient.CreateInstructionalMessage()).queue();
+                                        event.replyEmbeds(DiscordClient.CreateInstructionalMessage()).setEphemeral(true).queue();
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -714,7 +718,7 @@ public class CommandAdd {
         {
             if (WhitelistedPlayers.usingEasyWhitelist && !invalidMinecraftName && WhitelistedPlayers.CheckForPlayerEasyWhitelist(finalNameToAdd)
                     || !WhitelistedPlayers.usingEasyWhitelist && WhitelistedPlayers.CheckForPlayer(finalNameToAdd)) {
-                event.replyEmbeds(embedBuilderWhitelistSuccess.build()).queue();
+                event.replyEmbeds(embedBuilderWhitelistSuccess.build()).setEphemeral(true).queue();
 
                 // For instructional message
                 successfulWhitelist.set(true);

@@ -104,7 +104,7 @@ public class CommandRemove {
                     {
                         if (WhitelistedPlayers.usingEasyWhitelist && !WhitelistedPlayers.CheckForPlayerEasyWhitelist(finalNameToRemove)
                                 || !WhitelistedPlayers.usingEasyWhitelist && !WhitelistedPlayers.CheckForPlayer(finalNameToRemove)) {
-                            event.replyEmbeds(embedBuilderSuccess.build()).queue();
+                            event.replyEmbeds(embedBuilderSuccess.build()).setEphemeral(true).queue();
 
                             if (DiscordClient.whitelistedRoleAutoRemove) {
                                 List<String> whitelistRoles = new LinkedList<>();

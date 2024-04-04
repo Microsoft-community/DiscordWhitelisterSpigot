@@ -49,7 +49,7 @@ public class CommandWhoIs {
                 String discordId : keys) {
             List<?> registeredUsers = UserList.getRegisteredUsers(discordId);
             for (Object name : registeredUsers) {
-                if (name.equals(mc_name)) {
+                if (name.equals(mc_name.toLowerCase())) {
                     String userAsMention = "<@!" + discordId + ">"; // use this in-case the user has left the discord ? over using fetched member
                     StringBuilder usersWhitelistedPlayers = new StringBuilder();
                     for (Object targetWhitelistedPlayer : registeredUsers) {
@@ -69,7 +69,7 @@ public class CommandWhoIs {
                     else
                         DiscordWhitelister.getPluginLogger().warning("Failed to fetch avatar linked to Discord ID: " + discordId);
 
-                    DiscordClient.ReplyAndRemoveAfterSeconds(event, idFoundMessage.build());
+                    DiscordClient.ReplyAndRemoveAfterSeconds(event, idFoundMessage.build(), false);
                     idFound = true;
                     break;
                 }
