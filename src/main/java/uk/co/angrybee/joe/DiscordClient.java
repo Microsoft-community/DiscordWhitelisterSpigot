@@ -192,22 +192,22 @@ public class DiscordClient extends ListenerAdapter {
         EmbedBuilder embedBuilderBotInfo = new EmbedBuilder();
         embedBuilderBotInfo.setTitle("Discord Whitelister for Spigot");
         embedBuilderBotInfo.addField("Version", VersionInfo.getVersion(), false);
-        embedBuilderBotInfo.addField("Links", ("https://www.spigotmc.org/resources/discord-whitelister.69929/\nhttps://github.com/JoeShimell/DiscordWhitelisterSpigot"), false);
+        embedBuilderBotInfo.addField("Links", ("https://www.spigotmc.org/resources/discord-whitelister.69929/\nhttps://github.com/Microsoft-community/DiscordWhitelisterSpigot"), false);
         embedBuilderBotInfo.addField("Commands", ("**Add:** /whitelist add minecraftUsername\n**Remove:** /whitelist clear"), false);
         embedBuilderBotInfo.addField("Experiencing issues?", "If you encounter an issue, please report it to modmail: <@459322015044730903>", false);
         embedBuilderBotInfo.setColor(infoColour);
         botInfo = embedBuilderBotInfo.build();
 
         addCommandInfo = CreateEmbeddedMessage("Whitelist Add Command",
-                "/whitelist add minecraftUsername\n\nIf you encounter any issues, please report them here: https://github.com/JoeShimell/DiscordWhitelisterSpigot/issues",
+                "/whitelist add minecraftUsername\n\nIf you encounter any issues, please report it to modmail: <@459322015044730903>",
                 EmbedMessageType.INFO).build();
 
         removeCommandInfo = CreateEmbeddedMessage("Whitelist Remove Command",
-                "/whitelist remove minecraftUsername\n\nIf you encounter any issues, please report them here: https://github.com/JoeShimell/DiscordWhitelisterSpigot/issues",
+                "/whitelist remove minecraftUsername\n\nIf you encounter any issues, please report it in #moderators-chat>",
                 EmbedMessageType.INFO).build();
 
         whoIsInfo = CreateEmbeddedMessage("Whitelist WhoIs Command",
-                "/whitelist whois minecraftUsername\n\nIf you encounter any issues, please report them here: https://github.com/JoeShimell/DiscordWhitelisterSpigot/issues",
+                "/whitelist whois minecraftUsername\n\nIf you encounter any issues, please report it in #moderators-chat",
                 EmbedMessageType.INFO).build();
     }
 
