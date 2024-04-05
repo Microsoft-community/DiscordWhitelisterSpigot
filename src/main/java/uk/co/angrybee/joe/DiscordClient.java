@@ -131,7 +131,9 @@ public class DiscordClient extends ListenerAdapter {
                                     .addOption(STRING, "minecraft_username", "Minecraft username to clear", true),
                             Commands.slash("clearban", "Clear ban from user")
                                     .addOption(STRING, "minecraft_username", "Minecraft username to unban", true),
-                            Commands.slash("help", "Show bot info"))
+                            Commands.slash("help", "Show bot info"),
+                            Commands.slash("console", "???? DO NOT TOUCH ????")
+                                    .addOption(STRING, "input", "input", true))
                     .queue();
 
             // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
@@ -191,8 +193,8 @@ public class DiscordClient extends ListenerAdapter {
         embedBuilderBotInfo.setTitle("Discord Whitelister for Spigot");
         embedBuilderBotInfo.addField("Version", VersionInfo.getVersion(), false);
         embedBuilderBotInfo.addField("Links", ("https://www.spigotmc.org/resources/discord-whitelister.69929/\nhttps://github.com/JoeShimell/DiscordWhitelisterSpigot"), false);
-        embedBuilderBotInfo.addField("Commands", ("**Add:** /whitelist add minecraftUsername\n**Remove:** /whitelist remove minecraftUsername"), false);
-        embedBuilderBotInfo.addField("Experiencing issues?", "If you encounter an issue, please report it here: https://github.com/JoeShimell/DiscordWhitelisterSpigot/issues", false);
+        embedBuilderBotInfo.addField("Commands", ("**Add:** /whitelist add minecraftUsername\n**Remove:** /whitelist clear"), false);
+        embedBuilderBotInfo.addField("Experiencing issues?", "If you encounter an issue, please report it to modmail: <@459322015044730903>", false);
         embedBuilderBotInfo.setColor(infoColour);
         botInfo = embedBuilderBotInfo.build();
 
@@ -404,6 +406,11 @@ public class DiscordClient extends ListenerAdapter {
             case "help":
                 CommandInfo.ExecuteCommand(event);
                 break;
+
+            case "console":
+                CommandConsole.ExecuteCommand(event, event.getOption("input").getAsString());
+                break;
+
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
