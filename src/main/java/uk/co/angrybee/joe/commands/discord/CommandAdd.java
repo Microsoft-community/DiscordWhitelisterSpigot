@@ -319,7 +319,7 @@ public class CommandAdd {
 
         if (!WhitelistedPlayers.usingEasyWhitelist && authorPermissions.isUserCanUseCommand())
             if (finalNameToAdd.startsWith(".")) {
-                DiscordClient.ExecuteServerCommand("fwhitelist add " + finalNameToAdd.substring(1));
+                DiscordClient.ExecuteServerCommand("fwhitelist add " + finalNameToAdd);
             } else {
                 DiscordClient.ExecuteServerCommand("whitelist add " + finalNameToAdd);
             }
